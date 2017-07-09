@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 use File::Fetch;
-use LWP::Simple;
 use HTML::SimpleLinkExtor;
+use LWP::UserAgent();
 
 my $SOURCEURL="";
 my $DESIREDTYPE="";
@@ -29,7 +29,7 @@ sub FetchFile
 my $num_args = $#ARGV + 1;
 if ($num_args != 2) {
     print "Incorrect number of arguments\n";
-    print "Usage: getfiles <URL> <type>\n";
+    print "Usage: getfiles '<URL>' <type>\n";
     exit;
 }
 $SOURCEURL=$ARGV[0];
@@ -37,12 +37,24 @@ $DESIREDTYPE=$ARGV[1];
 $TYPELEN = length($DESIREDTYPE);
 my $url = URI->new($SOURCEURL);
 my $domain = $url->host;
-print "Domain: $domain\n";
+my $content = "";
 
 print "Saving files of type $DESIREDTYPE at URL $SOURCEURL\n";
 print "Reading source page\n";
-my $content = get $SOURCEURL;
-die "Couldn't get $SOURCEURL" unless defined $content;
+my $ua = LWP::UserAgent->new;
+$ua->timeout(10);
+$ua->env_proxy;
+$ua->agent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.1 Safari/603.1.30');
+my $response = $ua->get($SOURCEURL);
+if ($response->is_success)
+{
+    $content = $response->content;
+}
+else
+{
+    die $response->status_line;
+}
+
 my $extor = HTML::SimpleLinkExtor->new();
 $extor->parse($content);
 foreach ($extor->a)
