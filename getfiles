@@ -49,7 +49,7 @@ foreach ($extor->a)
 {
 	if (substr($_, -$TYPELEN) eq $DESIREDTYPE)
 	{
-		print "Saw it: $_\n";
+		print "Working on: $_\n";
 		FetchFile("http://$domain/$_");
 	}
 }

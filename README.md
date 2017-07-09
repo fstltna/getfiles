@@ -16,4 +16,8 @@ This will download all the MP3 files from that page.
 
 ==
 
-Note that this does not search recursively down the file tree. Only the given URL is searched, intentionally.
+Notes:
+
+This does not search recursively down the file tree. Only the given URL is searched, intentionally.
+This can only download files linked to via a <a> tag.
+
