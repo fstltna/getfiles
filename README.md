@@ -1,6 +1,10 @@
 # getfiles
 Tool to download all the files of the desired type from a web page
 
+First use CPAN to install these modules: File::Fetch; LWP::Simple; HTML::SimpleLinkExtor;
+
+# How to use it:
+
 1) CD into the directory you want the files to be saved to
 2) Run:
 
