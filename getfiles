@@ -42,7 +42,7 @@ my $content = "";
 print "Saving files of type $DESIREDTYPE at URL $SOURCEURL\n";
 print "Reading source page\n";
 my $ua = LWP::UserAgent->new;
-$ua->timeout(10);
+$ua->timeout(60);
 $ua->env_proxy;
 $ua->agent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.1 Safari/603.1.30');
 my $response = $ua->get($SOURCEURL);
