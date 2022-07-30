@@ -15,15 +15,19 @@ sub FetchFile
 	### build a File::Fetch object ###
 	my $ff = File::Fetch->new(uri => $CURFILE);
 	### fetch the uri to cwd() ###
-	my $where = $ff->fetch() or die $ff->error;
-	### fetch the uri to /tmp ###
-	#my $where = $ff->fetch( to => '/tmp' );
-	### parsed bits from the uri ###
-	$ff->uri;
-	$ff->scheme;
-	$ff->host;
-	$ff->path;
-	$ff->file;
+	#my $where = $ff->fetch() or die $ff->error;
+	my $where = $ff->fetch();
+	if ($where)
+	{
+		### fetch the uri to /tmp ###
+		#my $where = $ff->fetch( to => '/tmp' );
+		### parsed bits from the uri ###
+		$ff->uri;
+		$ff->scheme;
+		$ff->host;
+		$ff->path;
+		$ff->file;
+	}
 }
 
 my $num_args = $#ARGV + 1;
@@ -65,4 +69,19 @@ foreach ($extor->a)
 		FetchFile("http://$domain/$_");
 	}
 }
+print "Fixing File Names:\n";
+
+my $dirname = '.';
+opendir(DIR, $dirname) or die "Could not open '$dirname'\n";
+while (my $filename = readdir(DIR))
+{
+	if (substr($filename, -$TYPELEN) eq $DESIREDTYPE)
+	{
+		my $NewFile = $filename =~ s/\%20/ /rg;
+		print "Renaming '$filename' as '$NewFile'\n";
+		rename($filename, $NewFile);
+	}
+}
+closedir(DIR);
+
 exit 0;
